@@ -1,0 +1,37 @@
+<!-- public/embed.html -->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calendrier de disponibilités du studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="embed.css" />
+  </head>
+  <body>
+    <div class="embed-root">
+      <header class="embed-header">
+        <h1>Calendrier de disponibilités du studio</h1>
+      </header>
+
+      <main class="calendar-shell">
+        <div class="calendar-nav">
+          <button id="prevMonth" aria-label="Mois précédent">‹</button>
+          <h2 id="currentRange"></h2>
+          <button id="nextMonth" aria-label="Mois suivant">›</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Les jours seront injectés par embed.js -->
+        </div>
+
+        <div class="legend">
+          <span><span class="dot dot-unavailable"></span>Indisponible</span>
+          <span><span class="dot dot-pending"></span>En attente</span>
+          <span><span class="dot dot-available"></span>Disponible</span>
+        </div>
+      </main>
+    </div>
+
+    <script src="embed.js"></script>
+  </body>
+</html>
