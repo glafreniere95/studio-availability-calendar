@@ -56,3 +56,5 @@ app.put("/api/availability", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Studio calendar API running on http://localhost:${PORT}`);
 });
+
+app.use(express.static("public"));
