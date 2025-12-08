@@ -31,7 +31,7 @@ const Availability = mongoose.model("Availability", availabilitySchema);
 // --- 3. CONFIGURATION SERVEUR ---
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "Public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
