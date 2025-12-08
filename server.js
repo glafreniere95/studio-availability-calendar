@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 4000;
 // --- 1. VARIABLES D'ENVIRONNEMENT ---
 const MONGO_URI = process.env.MONGO_URI;
 // On définit un user/pass par défaut si jamais tu oublies de les mettre dans Render
-const ADMIN_USER = process.env.ADMIN_USER || "lucasgervais@geocan-int.com";
+const ADMIN_USER = process.env.ADMIN_USER || "lgervais";
 const ADMIN_PASS = process.env.ADMIN_PASS || "Geo8300!";
 
 // Connexion MongoDB
