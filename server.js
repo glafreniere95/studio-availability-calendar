@@ -1,48 +1,67 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path"); // Nécessaire pour gérer les chemins de fichiers
+const path = require("path");
+const mongoose = require("mongoose");
+require("dotenv").config(); 
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Autoriser les requêtes cross-origin
+// --- 1. CONNEXION MONGODB ---
+// Le code va chercher la variable "MONGO_URI" configurée dans Render
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  // Ceci s'affichera si tu as oublié de configurer Render
+  console.error("ERREUR CRITIQUE: La variable d'environnement MONGO_URI est manquante !");
+} else {
+  mongoose.connect(MONGO_URI)
+    .then(() => console.log("Connecté à MongoDB avec succès"))
+    .catch(err => console.error("Erreur connexion MongoDB:", err));
+}
+
+// --- 2. SCHÉMA DE DONNÉES ---
+const availabilitySchema = new mongoose.Schema({
+  date: { type: String, required: true, unique: true }, 
+  status: { type: String, required: true }              
+});
+
+const Availability = mongoose.model("Availability", availabilitySchema);
+
+// --- 3. CONFIGURATION SERVEUR ---
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "Public")));
 
-// --- CORRECTION 1 : Gestion du dossier Public (Respect de la majuscule) ---
-// On utilise path.join pour être sûr que le chemin est correct sur tous les OS
-app.use(express.static(path.join(__dirname, "Public"))); 
-
-// Stockage en mémoire (Disparaît si le serveur redémarre sur Render)
-// Format : { "2025-12-12": "unavailable", "2025-12-13": "pending" }
-let availability = {};
-
-// Healthcheck
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// --- CORRECTION 2 : Route pour récupérer TOUTES les disponibilités ---
-// C'est celle-ci qui manquait pour que loadAvailability() fonctionne
-app.get("/api/availability", (req, res) => {
-  // On transforme l'objet en tableau pour le frontend
-  // Ex: [{ date: "2025-12-12", status: "unavailable" }, ...]
-  const list = Object.keys(availability).map((date) => ({
-    date,
-    status: availability[date],
-  }));
-  res.json(list);
+// --- 4. ROUTES API ---
+
+app.get("/api/availability", async (req, res) => {
+  try {
+    const items = await Availability.find({}, 'date status -_id');
+    res.json(items);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
 });
 
-// Récupérer le statut d’une seule date (Optionnel, mais on le garde)
-app.get("/api/availability/:date", (req, res) => {
-  const date = req.params.date;
-  const status = availability[date] || "available";
-  res.json({ date, status });
+app.get("/api/availability/:date", async (req, res) => {
+  try {
+    const date = req.params.date;
+    const found = await Availability.findOne({ date });
+    const status = found ? found.status : "available";
+    res.json({ date, status });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
 });
 
-// Mettre à jour une date
-app.put("/api/availability", (req, res) => {
+app.put("/api/availability", async (req, res) => {
   const { date, status } = req.body;
 
   if (!date || !status) {
@@ -54,16 +73,22 @@ app.put("/api/availability", (req, res) => {
     return res.status(400).json({ error: "invalid status" });
   }
 
-  // Mise à jour de la mémoire
-  availability[date] = status;
-
-  console.log(`Mise à jour : ${date} -> ${status}`); // Log pour débugger
-  res.json({ date, status });
+  try {
+    await Availability.findOneAndUpdate(
+      { date: date },
+      { status: status },
+      { upsert: true, new: true }
+    );
+    console.log(`Sauvegardé : ${date} -> ${status}`);
+    res.json({ date, status });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Impossible de sauvegarder" });
+  }
 });
 
-// Route par défaut pour renvoyer vers l'admin si on tape juste l'URL racine
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "Public", "admin.html"));
+  res.sendFile(path.join(__dirname, "Public", "admin.html"));
 });
 
 app.listen(PORT, () => {
