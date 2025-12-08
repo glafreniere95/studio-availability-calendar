@@ -87,8 +87,10 @@ app.put("/api/availability", async (req, res) => {
   }
 });
 
+// Route Front-end (Modifiée pour afficher l'embed par défaut)
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "admin.html"));
+  // On renvoie embed.html au lieu de admin.html
+  res.sendFile(path.join(__dirname, "public", "embed.html"));
 });
 
 app.listen(PORT, () => {
