@@ -163,7 +163,8 @@ body {
 }
 
 .day {
-  height: 38px;
+  aspect-ratio: 1/1;
+  border:0px;
   border-radius: 14px;
   display: flex;
   align-items: center;
