@@ -1,7 +1,6 @@
 // public/embed.js
 
-const API_URL =
-  "https://studio-availability-calendar.onrender.com/api/availability";
+const API_URL = "/api/availability"; 
 
 // Map interne "YYYY-MM-DD" -> "available" | "unavailable" | "pending"
 let statusByDate = {};
