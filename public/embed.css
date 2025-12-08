@@ -17,7 +17,6 @@ body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
-  background: #f5f7fb;
   color: #111827;
 }
 
@@ -142,7 +141,8 @@ body {
 }
 
 .day {
-  height: 38px;
+  aspect-ratio: 1/1;
+  border:0px;
   display: flex;
   align-items: center;
   justify-content: center;
