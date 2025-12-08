@@ -173,6 +173,21 @@ body {
   outline: 2px solid #4f46e5;
   outline-offset: 1px;
 }
+/* Style pour les dates passées (à ajouter à la fin du fichier) */
+.day.past {
+  background-color: #f3f4f6; /* Gris clair */
+  color: #d1d5db;            /* Texte gris pâle */
+  cursor: not-allowed;       /* Curseur "interdit" */
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+
+/* On s'assure que le hover ne marche pas sur les jours passés */
+.day.past:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: #f3f4f6;
+}
 
 /* Survol, juste un léger lift sur desktop */
 
