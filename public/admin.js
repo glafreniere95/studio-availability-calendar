@@ -132,6 +132,10 @@ function buildMonthCard(monthDate) {
 
   const lastDay = new Date(year, monthIndex + 1, 0).getDate();
   const todayKey = toKey(new Date());
+  
+  // --- NOUVEAU : Calcul de la date d'aujourd'hui (sans les heures) ---
+  const now = new Date();
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   for (let d = 1; d <= lastDay; d++) {
     const dateObj = new Date(year, monthIndex, d);
@@ -143,23 +147,31 @@ function buildMonthCard(monthDate) {
     cell.textContent = d.toString();
     cell.dataset.date = key;
 
-    const status = statusByDate[key] || "available";
-    cell.classList.add(status);
-    cell.dataset.status = status;
+    // --- NOUVEAU : Vérification si c'est le passé ---
+    // On compare l'objet Date courant avec "aujourd'hui à 00h00"
+    if (dateObj < todayDate) {
+      cell.classList.add("past");
+      // On n'ajoute PAS les écouteurs d'événements (clic/drag)
+      // pour empêcher la modification
+    } else {
+      // C'est aujourd'hui ou le futur, on met le statut et les événements
+      const status = statusByDate[key] || "available";
+      cell.classList.add(status);
+      cell.dataset.status = status;
 
-    if (key === todayKey) {
-      cell.classList.add("today");
-    }
-
-    // Clic simple pour cycle ou pinceau
-    cell.addEventListener("mousedown", () => onDayInteract(key, cell));
-
-    // Drag pour peindre quand un pinceau est sélectionné
-    cell.addEventListener("mouseover", (event) => {
-      if (event.buttons === 1 && currentMode !== "cycle") {
-        onDayInteract(key, cell, true);
+      if (key === todayKey) {
+        cell.classList.add("today");
       }
-    });
+
+      // Clic simple
+      cell.addEventListener("mousedown", () => onDayInteract(key, cell));
+      // Drag
+      cell.addEventListener("mouseover", (event) => {
+        if (event.buttons === 1 && currentMode !== "cycle") {
+          onDayInteract(key, cell, true);
+        }
+      });
+    }
 
     daysGrid.appendChild(cell);
   }
