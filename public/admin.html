@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin – Studio Availability</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+
+  <body>
+    <div class="admin-root">
+
+      <header class="admin-header">
+        <div class="brand">
+          <span class="logo">📅</span>
+          <h1>StudioCal – Admin</h1>
+        </div>
+
+        <a href="embed.html" class="view-public">Voir la page publique ⤴</a>
+      </header>
+
+      <!-- Controls -->
+      <section class="controls">
+        <div class="paint-toggle">
+          <label>Mode :</label>
+          <button id="modeCycle" class="mode-btn active">
+            Click to Cycle
+          </button>
+          <button id="modeAvailable" class="mode-btn">Set Available</button>
+          <button id="modeUnavailable" class="mode-btn">Set Unavailable</button>
+          <button id="modePending" class="mode-btn">Set Pending</button>
+        </div>
+      </section>
+
+      <!-- Calendar -->
+      <main class="calendar-shell">
+        <div class="calendar-nav">
+          <button id="prevMonth" aria-label="Mois précédent">‹</button>
+          <h2 id="currentRange"></h2>
+          <button id="nextMonth" aria-label="Mois suivant">›</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- months injected by JS -->
+        </div>
+
+        <div class="legend">
+          <span><span class="dot dot-unavailable"></span>Indisponible</span>
+          <span><span class="dot dot-pending"></span>En Attente</span>
+          <span><span class="dot dot-available"></span>Disponible</span>
+        </div>
+      </main>
+
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
