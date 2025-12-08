@@ -179,7 +179,6 @@ body {
   color: #d1d5db;            /* Texte gris pâle */
   cursor: not-allowed;       /* Curseur "interdit" */
   box-shadow: none;
-  border: 1px solid #e5e7eb;
 }
 
 /* On s'assure que le hover ne marche pas sur les jours passés */
