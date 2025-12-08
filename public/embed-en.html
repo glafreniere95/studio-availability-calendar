@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Studio Availability Calendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="embed.css" />
+  </head>
+  <body>
+    <div class="embed-root">
+      <header class="embed-header">
+        <h1>Studio Availability</h1>
+      </header>
+
+      <main class="calendar-shell">
+        <div class="calendar-nav">
+          <button id="prevMonth" aria-label="Previous month">‹</button>
+          <h2 id="currentRange"></h2>
+          <button id="nextMonth" aria-label="Next month">›</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+          </div>
+
+        <div class="legend">
+          <span><span class="dot dot-unavailable"></span>Unavailable</span>
+          <span><span class="dot dot-pending"></span>Pending</span>
+          <span><span class="dot dot-available"></span>Available</span>
+        </div>
+      </main>
+    </div>
+
+    <script src="embed-en.js"></script>
+  </body>
+</html>
