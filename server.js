@@ -88,7 +88,7 @@ app.put("/api/availability", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "Public", "admin.html"));
+  res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
 app.listen(PORT, () => {
