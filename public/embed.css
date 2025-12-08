@@ -18,6 +18,8 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
   color: #111827;
+  touch-action: manipulation; 
+  -webkit-text-size-adjust: 100%; /* Empêche le changement de taille de police auto sur iOS */
 }
 
 .embed-root {
