@@ -98,7 +98,7 @@ function renderCalendar() {
 
 function buildMonthCard(monthDate) {
   const year = monthDate.getFullYear();
-  const monthIndex = monthDate.getMonth(); // 0 à 11
+  const monthIndex = monthDate.getMonth(); 
 
   const monthCard = document.createElement("section");
   monthCard.className = "month-card";
@@ -108,7 +108,6 @@ function buildMonthCard(monthDate) {
   header.textContent = `${MONTHS_FR[monthIndex]} ${year}`;
   monthCard.appendChild(header);
 
-  // Ligne des jours de semaine
   const weekdaysRow = document.createElement("div");
   weekdaysRow.className = "weekdays";
   WEEKDAYS_FR.forEach((label) => {
@@ -119,44 +118,47 @@ function buildMonthCard(monthDate) {
   });
   monthCard.appendChild(weekdaysRow);
 
-  // Grille des jours
   const daysGrid = document.createElement("div");
   daysGrid.className = "days";
 
   const firstDayOfMonth = new Date(year, monthIndex, 1);
-  const dayOfWeek = firstDayOfMonth.getDay(); // 0 dimanche, 6 samedi
+  const dayOfWeek = firstDayOfMonth.getDay(); 
 
-  // Padding avant le 1er
   for (let i = 0; i < dayOfWeek; i++) {
     const emptyCell = document.createElement("div");
     emptyCell.className = "day empty";
     daysGrid.appendChild(emptyCell);
   }
 
-  // Nombre de jours dans le mois
   const lastDay = new Date(year, monthIndex + 1, 0).getDate();
   const todayKey = toKey(new Date());
+  
+  // --- NOUVEAU : Date référence ---
+  const now = new Date();
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   for (let day = 1; day <= lastDay; day++) {
-    const date = new Date(year, monthIndex, day);
-    const key = toKey(date);
+    const dateObj = new Date(year, monthIndex, day);
+    const key = toKey(dateObj);
 
     const cell = document.createElement("button");
     cell.type = "button";
     cell.className = "day";
-
-    // Etat de disponibilité
-    const status = statusByDate[key] || "available";
-    cell.classList.add(status);
-
-    if (key === todayKey) {
-      cell.classList.add("today");
-    }
-
     cell.textContent = day.toString();
+    cell.disabled = true; // Toujours désactivé en embed
 
-    // Pas de clic en embed, c'est une vue lecture seule
-    cell.disabled = true;
+    // --- NOUVEAU : Si c'est le passé ---
+    if (dateObj < todayDate) {
+        cell.classList.add("past");
+    } else {
+        // Sinon on met le statut normal
+        const status = statusByDate[key] || "available";
+        cell.classList.add(status);
+        
+        if (key === todayKey) {
+            cell.classList.add("today");
+        }
+    }
 
     daysGrid.appendChild(cell);
   }
